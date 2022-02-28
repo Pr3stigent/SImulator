@@ -39,3 +39,9 @@ export default {
 
 	multiplier_ideas: ["- movement speed", "- diving speed", "- earnings", "- strength multiplier", "- exp multiplier"],
 }
+
+/* Todo
+
+Mining function, Hovering over blocks with a limit, tools basic action, block health
+
+*/
