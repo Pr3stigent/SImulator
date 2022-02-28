@@ -25,17 +25,17 @@ const RenderService = Knit.CreateService({
 		let blockId = 0
 
 		const tablePoints = Workspace.LayerPoints.GetChildren() as Model[]
-		tablePoints.forEach((layerModel: Model, layer: number) => {
+		tablePoints.forEach((sectionModel: Model, sectionId: number) => {
 			const section = new Instance("Folder")
-			section.Name = tostring(layer)
+			section.Name = tostring(sectionId)
 			section.Parent = Workspace.Voxels
 
-			if (Sections.get(layer) === undefined) {
-				Sections.set(layer, [])
+			if (Sections.get(sectionId) === undefined) {
+				Sections.set(sectionId, [])
 			}
 
-			const top = layerModel.FindFirstChild("Top") as Model
-			const bottom = layerModel.FindFirstChild("Bottom") as Model
+			const top = sectionModel.FindFirstChild("Top") as Model
+			const bottom = sectionModel.FindFirstChild("Bottom") as Model
 
 			const top1 = top.FindFirstChild("1") as Part
 			const top2 = top.FindFirstChild("2") as Part
@@ -54,37 +54,28 @@ const RenderService = Knit.CreateService({
 					layerFolder.Name = tostring(y)
 					layerFolder.Parent = section
 
-					const layerTable = Sections.get(layer)
-					if (layerTable === undefined) {
-						return
-					}
+					const sectionTable = Sections.get(sectionId) as { [key: number]: Part[] }
 
-					let lalayerTable = layerTable[y]
-					if (lalayerTable === undefined) {
-						layerTable[y] = []
-						lalayerTable = layerTable[y]
+					if (sectionTable[y] === undefined) {
+						sectionTable[y] = []
 					}
 
 					for (let z = 0; z <= AMOUNT_OF_BLOCKS.Z; z++) {
 						blockId += 1
 
-						const voxel = layerModel.FindFirstChild("Template")?.Clone() as Part
+						const voxel = sectionModel.FindFirstChild("Template")?.Clone() as Part
 						voxel.Name = tostring(blockId)
 						voxel.Transparency = 0
 						voxel.Position = top1.Position.add(new Vector3(x, -y, -z).mul(AXES_SIZE))
 						voxel.Parent = y === 0 || y === AMOUNT_OF_BLOCKS.Y ? layerFolder : ServerStorage.StoredVoxels
 
-						if (Voxels === undefined) {
-							return
-						}
-
 						Voxels[blockId] = {
 							Block: voxel,
 							CurrentLayer: y,
-							Layer: layer,
+							Layer: sectionId,
 						}
 
-						lalayerTable.insert(lalayerTable.size(), voxel)
+						sectionTable[y].insert(sectionTable[y].size(), voxel)
 					}
 				}
 
