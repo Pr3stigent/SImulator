@@ -7,7 +7,11 @@ declare global {
 	}
 }
 
-const AXES_SIZE = 2.5
+const AXES_SIZE = 7.5
+
+function scale(number: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+	return ((number - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+}
 
 const RenderService = Knit.CreateService({
 	Name: "RenderService",
@@ -25,6 +29,7 @@ const RenderService = Knit.CreateService({
 		let blockId = 0
 
 		const tablePoints = Workspace.LayerPoints.GetChildren() as Model[]
+
 		tablePoints.forEach((sectionModel: Model, sectionId: number) => {
 			const section = new Instance("Folder")
 			section.Name = tostring(sectionId)
@@ -66,6 +71,7 @@ const RenderService = Knit.CreateService({
 						const voxel = sectionModel.FindFirstChild("Template")?.Clone() as Part
 						voxel.Name = tostring(blockId)
 						voxel.Transparency = 0
+						voxel.Size = new Vector3(AXES_SIZE, AXES_SIZE, AXES_SIZE)
 						voxel.Position = top1.Position.add(new Vector3(x, -y, -z).mul(AXES_SIZE))
 						voxel.Parent = y === 0 || y === AMOUNT_OF_BLOCKS.Y ? layerFolder : ServerStorage.StoredVoxels
 
@@ -82,6 +88,8 @@ const RenderService = Knit.CreateService({
 				task.wait()
 			}
 		})
+
+		Workspace.LayerPoints.Parent = ServerStorage
 
 		for (const [_, blockData] of pairs(Voxels)) {
 			const section = Sections?.get(blockData.Layer) as { [key: number]: Part[] }
