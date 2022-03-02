@@ -42,6 +42,6 @@ export default {
 
 /* Todo
 
-Mining function, Hovering over blocks with a limit, tools basic action, block health
+Mining function, tools basic action, block health
 
 */
