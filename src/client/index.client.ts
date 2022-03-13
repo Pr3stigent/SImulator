@@ -1,4 +1,5 @@
 import { KnitClient as Knit } from "@rbxts/knit"
+import MainApp from "./Fusion/MainApp"
 
 Knit.AddControllersDeep(script.WaitForChild("Knit").WaitForChild("Controllers"))
 Knit.Start()
@@ -6,3 +7,5 @@ Knit.Start()
 		print("Knit is running on Client")
 	})
 	.catch(error)
+
+MainApp.Mount()

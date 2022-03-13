@@ -16,7 +16,7 @@ const humanoidRootPart = humanoid.RootPart as BasePart
 
 const voxels = Workspace.Voxels
 
-const MAX_DISTANCE = 50
+const MAX_DISTANCE = 100
 
 const ToolController = Knit.CreateController({
 	Name: "ToolController",
